@@ -16,10 +16,8 @@
 
 package com.nebhale.springone2014.repository;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+// TODO 2: NOT_FOUND Status Code
+//@ResponseStatus(HttpStatus.NOT_FOUND)
 public final class GameDoesNotExistException extends Exception {
 
     public GameDoesNotExistException(Long id) {

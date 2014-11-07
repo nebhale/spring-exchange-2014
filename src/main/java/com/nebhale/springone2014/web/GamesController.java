@@ -29,20 +29,17 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
-@RestController
-@RequestMapping(value = "/games")
+// TODO 1: REST Controller for /games
+//@RestController
+//@RequestMapping(value = "/games")
 final class GamesController {
 
     private final DoorsResourceAssembler doorsResourceAssembler;
@@ -59,25 +56,31 @@ final class GamesController {
         this.gameResourceAssembler = gameResourceAssembler;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "")
-    @ResponseStatus(HttpStatus.CREATED)
+    // TODO 1: POST /
+//    @RequestMapping(method = RequestMethod.POST, value = "")
+    // TODO 2: CREATED Status Code
+//    @ResponseStatus(HttpStatus.CREATED)
     HttpHeaders createGame() {
         Game game = this.gameRepository.create();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(linkTo(GamesController.class).slash(game.getId()).toUri());
+        // TODO 1: Location: /games/{gameId}
+//        headers.setLocation(linkTo(GamesController.class).slash(game.getId()).toUri());
 
         return headers;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // TODO 1: GET /{gameId}, Content-Type: application/json
+//    @RequestMapping(method = RequestMethod.GET, value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Resource<Game> showGame(@PathVariable Long gameId) throws GameDoesNotExistException {
+    Game showGame(@PathVariable Long gameId) throws GameDoesNotExistException {
         Game game = this.gameRepository.retrieve(gameId);
-        return this.gameResourceAssembler.toResource(game);
+        // TODO 3: return assembled Game Resource
+        return game;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{gameId}")
+    // TODO 1: DELETE /{gameId}
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     void destroyGame(@PathVariable Long gameId) throws GameDoesNotExistException {
         this.gameRepository.remove(gameId);
@@ -90,8 +93,9 @@ final class GamesController {
         return this.doorsResourceAssembler.toResource(game);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{gameId}/doors/{doorId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    // TODO 1: PUT /{gameId}/doors/{doorId}, Accepts: application/json, Content-Type: application/json
+//    @RequestMapping(method = RequestMethod.PUT, value = "/{gameId}/doors/{doorId}",
+//            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     void transitionDoor(@PathVariable Long gameId, @PathVariable Long doorId,
                         @RequestBody Map<String, String> payload)
@@ -101,8 +105,9 @@ final class GamesController {
         this.gameRepository.retrieve(gameId).transition(doorId, status);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    // TODO 2: Handle IllegalArgumentException, BAD_REQUEST Status Code
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     String handleBadRequests(Exception e) {
         return e.getMessage();
     }
